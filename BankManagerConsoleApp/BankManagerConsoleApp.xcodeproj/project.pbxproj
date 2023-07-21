@@ -74,10 +74,10 @@
 		5BD7F00C2A5F8E3C00429D75 /* Bank */ = {
 			isa = PBXGroup;
 			children = (
-				3C93CE2B2A5E47C10083E706 /* BankManager.swift */,
-				3C93CE2D2A5E48120083E706 /* Client.swift */,
-				5BD7F0082A5E4A8E00429D75 /* Bank.swift */,
 				3C35A7AF2A694E57008BB5C2 /* BankingType.swift */,
+				3C93CE2D2A5E48120083E706 /* Client.swift */,
+				3C93CE2B2A5E47C10083E706 /* BankManager.swift */,
+				5BD7F0082A5E4A8E00429D75 /* Bank.swift */,
 			);
 			path = Bank;
 			sourceTree = "<group>";

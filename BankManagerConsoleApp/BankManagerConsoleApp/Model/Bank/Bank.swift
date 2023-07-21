@@ -31,36 +31,34 @@ final class Bank {
     }
     
     private func startTask() {
-        let group = DispatchGroup()
         let clientCount = Int.random(in: 10...30)
         let startTime = Date()
-        let depositSemaphore = DispatchSemaphore(value: depositBankManagerCount)
-        let loanSemaphore = DispatchSemaphore(value: loanBankManagerCount)
-        var workSemaphore: DispatchSemaphore
+        
+        let depositOperationQueue = OperationQueue()
+        depositOperationQueue.maxConcurrentOperationCount = depositBankManagerCount
+        let loanOperationQueue = OperationQueue()
+        loanOperationQueue.maxConcurrentOperationCount = loanBankManagerCount
+        
+        var operationQueue: OperationQueue
         
         setUpClientQueue(count: clientCount)
         
         while !clientQueue.isEmpty {
             guard let client = clientQueue.dequeue() else { break }
-            workSemaphore = client.banking == .deposit ? depositSemaphore : loanSemaphore
             
-            workSemaphore.wait()
-            DispatchQueue.global().async(group: group) {
-                self.bankManger.work(client: client)
-                workSemaphore.signal()
+            operationQueue = (client.banking == .deposit) ? depositOperationQueue : loanOperationQueue
+            
+            let working = BlockOperation {
+                self.bankManger.work(for: client)
             }
+            
+            operationQueue.addOperation(working)
         }
         
-        group.wait()
+        depositOperationQueue.waitUntilAllOperationsAreFinished()
+        loanOperationQueue.waitUntilAllOperationsAreFinished()
         printTaskResult(clientCount, startTime)
         open()
-    }
-    
-    private func printTaskResult(_ clientCount: Int, _ startTime: Date) {
-        let totalWorkTime = Date().timeIntervalSince(startTime)
-        let formattedWorkTime = String(format: "%.2f", totalWorkTime)
-        
-        print("업무가 마감되었습니다. 오늘 업무를 처리한 고객은 총 \(clientCount)명이며, 총 업무시간은 \(formattedWorkTime)초입니다.")
     }
     
     private func setUpClientQueue(count: Int) {
@@ -72,5 +70,12 @@ final class Bank {
             client = Client(turn, bankingType)
             clientQueue.enqueue(client)
         }
+    }
+    
+    private func printTaskResult(_ clientCount: Int, _ startTime: Date) {
+        let totalWorkTime = Date().timeIntervalSince(startTime)
+        let formattedWorkTime = String(format: "%.2f", totalWorkTime)
+        
+        print("업무가 마감되었습니다. 오늘 업무를 처리한 고객은 총 \(clientCount)명이며, 총 업무시간은 \(formattedWorkTime)초입니다.")
     }
 }
