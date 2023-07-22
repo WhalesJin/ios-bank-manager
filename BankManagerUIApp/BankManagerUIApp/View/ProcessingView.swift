@@ -1,5 +1,5 @@
 //
-//  ProcessingScrollView.swift
+//  ProcessingView.swift
 //  BankManagerUIApp
 //
 //  Created by Hyungmin Lee on 2023/07/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProcessingScrollView: UIStackView {
+final class ProcessingView: UIStackView {
     private let waitingScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .magenta
@@ -98,11 +98,26 @@ final class ProcessingScrollView: UIStackView {
             taskingStackView.addArrangedSubview(label)
         }
     }
+}
+
+// MARK: - Client ManageMethod
+extension ProcessingView {
+    func addProcessingStackView() {
+        for _ in 1...10 {
+            let label = UILabel()
+            label.text = "ADD"
+            
+            waitingStackView.addArrangedSubview(label)
+        }
+    }
     
+    func resetWaitingStackView() {
+        waitingStackView.subviews.forEach { $0.removeFromSuperview() }
+    }
 }
 
 // MARK: - Constraints
-extension ProcessingScrollView {
+extension ProcessingView {
     private func setUpWaitingScrollViewConstraints() {
         NSLayoutConstraint.activate([
             waitingScrollView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),

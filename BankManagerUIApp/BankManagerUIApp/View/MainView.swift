@@ -75,7 +75,7 @@ final class MainView: UIView {
         return label
     }()
     
-    private let processingScrollView = ProcessingScrollView()
+    private let processingView = ProcessingView()
     
     private let mainStackView: UIStackView = {
         let stackView = UIStackView()
@@ -104,7 +104,7 @@ final class MainView: UIView {
     private func configureUI() {
         [addClientButton, resetClientButton].forEach { taskStackView.addArrangedSubview($0) }
         [waitingLabel, taskingLabel].forEach { processingStackView.addArrangedSubview($0) }
-        [taskStackView, taskTimeLabel, processingStackView, processingScrollView].forEach { mainStackView.addArrangedSubview($0) }
+        [taskStackView, taskTimeLabel, processingStackView, processingView].forEach { mainStackView.addArrangedSubview($0) }
         addSubview(mainStackView)
     }
     
@@ -131,9 +131,11 @@ extension MainView {
 extension MainView {
     @objc func didTappedAddClientButton() {
         delegate?.didTappedAddClientButton()
+        processingView.addProcessingStackView()
     }
     
     @objc func didTappedResetClientButton() {
         delegate?.didTappedResetClientButton()
+        processingView.resetWaitingStackView()
     }
 }
