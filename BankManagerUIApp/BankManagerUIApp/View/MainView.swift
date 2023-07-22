@@ -1,0 +1,130 @@
+//
+//  MainView.swift
+//  BankManagerUIApp
+//
+//  Created by Hyungmin Lee on 2023/07/22.
+//
+
+import UIKit
+
+final class MainView: UIView {
+    private let taskStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.backgroundColor = .blue
+        return stackView
+    }()
+    
+    private lazy var addClientButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("고객 10명 추가", for: .normal)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(didTappedAddClientButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var resetClientButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("초기화", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(didTappedResetClientButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private let taskTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "업무 시간"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 25)
+        return label
+    }()
+    
+    private let processingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.backgroundColor = .gray
+        return stackView
+    }()
+    
+    private let waitingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "대기중"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 40)
+        label.textColor = .white
+        label.backgroundColor = .green
+        return label
+    }()
+    
+    private let taskingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "업무중"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 40)
+        label.textColor = .white
+        label.backgroundColor = .purple
+        return label
+    }()
+    
+    private let processingScrollView = ProcessingScrollView()
+    
+    private let mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+//        stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    convenience init() {
+        self.init(frame: CGRect.zero)
+        
+        backgroundColor = .white
+        configureUI()
+        setUpConstraints()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureUI() {
+        [addClientButton, resetClientButton].forEach { taskStackView.addArrangedSubview($0) }
+        [waitingLabel, taskingLabel].forEach { processingStackView.addArrangedSubview($0) }
+        [taskStackView, taskTimeLabel, processingStackView, processingScrollView].forEach { mainStackView.addArrangedSubview($0) }
+        addSubview(mainStackView)
+    }
+    
+    private func setUpConstraints() {
+        NSLayoutConstraint.activate([
+            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+}
+
+// MARK: - setUpConstraints
+extension MainView {
+    
+}
+
+// MARK: - Button Action
+extension MainView {
+    @objc func didTappedAddClientButton() {
+        
+    }
+    
+    @objc func didTappedResetClientButton() {
+        
+    }
+}
