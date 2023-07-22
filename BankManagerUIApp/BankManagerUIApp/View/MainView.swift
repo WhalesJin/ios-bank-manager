@@ -113,7 +113,11 @@ final class MainView: UIView {
             mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+//            processingStackView.heightAnchor.constraint(equalToConstant: 75),
+//            taskStackView.heightAnchor.constraint(equalToConstant: 50),
+//            taskTimeLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

@@ -11,25 +11,13 @@ final class ProcessingScrollView: UIStackView {
     private let waitingScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .magenta
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
     private let waitingContentView: UIView = {
         let view = UIView()
         view.backgroundColor = .red
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let taskingScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .brown
-        return scrollView
-    }()
-    
-    private let taskingContentView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -79,17 +67,14 @@ final class ProcessingScrollView: UIStackView {
     private func configureUI() {
         waitingContentView.addSubview(waitingStackView)
         waitingScrollView.addSubview(waitingContentView)
-        taskingContentView.addSubview(taskingStackView)
-        taskingScrollView.addSubview(taskingContentView)
         
-        [waitingScrollView, taskingScrollView].forEach { addArrangedSubview($0) }
+        [waitingScrollView, taskingStackView].forEach { addArrangedSubview($0) }
     }
     
     private func setUpConstraints() {
-        setUpWaitingContentViewConstraints()
-        setUpTaskingContentViewConstraints()
+        setUpWaitingScrollViewConstraints()
+        setUpContenViewConstraints(waitingContentView, waitingScrollView)
         setUpWaitingStackViewConstraints()
-        setUpTaskingStackViewConstraints()
     }
     
     private func setUpLabels() {
@@ -112,30 +97,25 @@ final class ProcessingScrollView: UIStackView {
 
 // MARK: - Constraints
 extension ProcessingScrollView {
-    private func setUpWaitingContentViewConstraints() {
+    private func setUpWaitingScrollViewConstraints() {
         NSLayoutConstraint.activate([
-            waitingContentView.leadingAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.leadingAnchor),
-            waitingContentView.trailingAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.trailingAnchor),
-            waitingContentView.topAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.topAnchor),
-            waitingContentView.bottomAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.bottomAnchor),
-            waitingContentView.widthAnchor.constraint(equalTo: waitingScrollView.frameLayoutGuide.widthAnchor)
+            waitingScrollView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
+            waitingScrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            waitingScrollView.topAnchor.constraint(equalTo: topAnchor),
+            waitingScrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        let heightConstraint = waitingContentView.heightAnchor.constraint(equalTo: waitingScrollView.frameLayoutGuide.heightAnchor, constant: 1)
-        heightConstraint.priority = .init(1)
-        heightConstraint.isActive = true
     }
     
-    private func setUpTaskingContentViewConstraints() {
+    private func setUpContenViewConstraints(_ contenView: UIView, _ scrollView: UIScrollView) {
         NSLayoutConstraint.activate([
-            taskingContentView.leadingAnchor.constraint(equalTo: taskingScrollView.contentLayoutGuide.leadingAnchor),
-            taskingContentView.trailingAnchor.constraint(equalTo: taskingScrollView.contentLayoutGuide.trailingAnchor),
-            taskingContentView.topAnchor.constraint(equalTo: taskingScrollView.contentLayoutGuide.topAnchor),
-            taskingContentView.bottomAnchor.constraint(equalTo: taskingScrollView.contentLayoutGuide.bottomAnchor),
-            taskingContentView.widthAnchor.constraint(equalTo: taskingScrollView.frameLayoutGuide.widthAnchor)
+            contenView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contenView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contenView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contenView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contenView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
         ])
         
-        let heightConstraint = taskingContentView.heightAnchor.constraint(equalTo: taskingScrollView.frameLayoutGuide.heightAnchor, constant: 1)
+        let heightConstraint = contenView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor, constant: 1)
         heightConstraint.priority = .init(1)
         heightConstraint.isActive = true
     }
@@ -146,15 +126,6 @@ extension ProcessingScrollView {
             waitingStackView.trailingAnchor.constraint(equalTo: waitingContentView.trailingAnchor),
             waitingStackView.topAnchor.constraint(equalTo: waitingContentView.topAnchor),
             waitingStackView.bottomAnchor.constraint(equalTo: waitingContentView.bottomAnchor)
-        ])
-    }
-    
-    private func setUpTaskingStackViewConstraints() {
-        NSLayoutConstraint.activate([
-            taskingStackView.leadingAnchor.constraint(equalTo: taskingContentView.leadingAnchor),
-            taskingStackView.trailingAnchor.constraint(equalTo: taskingContentView.trailingAnchor),
-            taskingStackView.topAnchor.constraint(equalTo: taskingContentView.topAnchor),
-            taskingStackView.bottomAnchor.constraint(equalTo: taskingContentView.bottomAnchor)
         ])
     }
 }
