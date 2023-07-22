@@ -18,13 +18,13 @@ final class MainView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
-        stackView.backgroundColor = .blue
         return stackView
     }()
     
     private lazy var addClientButton: UIButton = {
         let button = UIButton()
         button.setTitle("고객 10명 추가", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(didTappedAddClientButton), for: .touchUpInside)
         return button
@@ -115,9 +115,9 @@ final class MainView: UIView {
             mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-//            processingStackView.heightAnchor.constraint(equalToConstant: 75),
-//            taskStackView.heightAnchor.constraint(equalToConstant: 50),
-//            taskTimeLabel.heightAnchor.constraint(equalToConstant: 50)
+            processingStackView.heightAnchor.constraint(equalToConstant: 50),
+            taskStackView.heightAnchor.constraint(equalToConstant: 40),
+            taskTimeLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
 }

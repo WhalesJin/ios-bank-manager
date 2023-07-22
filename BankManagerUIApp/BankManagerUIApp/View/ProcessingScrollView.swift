@@ -33,11 +33,16 @@ final class ProcessingScrollView: UIStackView {
         return stackView
     }()
     
+    private let taskingContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .yellow
+        return view
+    }()
+    
     private let taskingStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 10
-        stackView.distribution = .fillEqually
         stackView.backgroundColor = .orange
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +58,7 @@ final class ProcessingScrollView: UIStackView {
         
         configureUI()
         setUpConstraints()
-//        setUpLabels()
+        setUpLabels()
     }
     
     override init(frame: CGRect) {
@@ -67,25 +72,26 @@ final class ProcessingScrollView: UIStackView {
     private func configureUI() {
         waitingContentView.addSubview(waitingStackView)
         waitingScrollView.addSubview(waitingContentView)
-        
-        [waitingScrollView, taskingStackView].forEach { addArrangedSubview($0) }
+        taskingContentView.addSubview(taskingStackView)
+        [waitingScrollView, taskingContentView].forEach { addArrangedSubview($0) }
     }
     
     private func setUpConstraints() {
         setUpWaitingScrollViewConstraints()
-        setUpContenViewConstraints(waitingContentView, waitingScrollView)
+        setUpWaitingContenViewConstraints(waitingContentView, waitingScrollView)
         setUpWaitingStackViewConstraints()
+        setUpTaskingStackViewConstraints()
     }
     
     private func setUpLabels() {
-        for _ in 0...4 {
+        for _ in 0...20 {
             let label = UILabel()
             label.text = "TEST"
             
             waitingStackView.addArrangedSubview(label)
         }
         
-        for _ in 0...4 {
+        for _ in 0...7 {
             let label = UILabel()
             label.text = "TEST"
             
@@ -106,7 +112,7 @@ extension ProcessingScrollView {
         ])
     }
     
-    private func setUpContenViewConstraints(_ contenView: UIView, _ scrollView: UIScrollView) {
+    private func setUpWaitingContenViewConstraints(_ contenView: UIView, _ scrollView: UIScrollView) {
         NSLayoutConstraint.activate([
             contenView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contenView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
@@ -118,6 +124,14 @@ extension ProcessingScrollView {
         let heightConstraint = contenView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor, constant: 1)
         heightConstraint.priority = .init(1)
         heightConstraint.isActive = true
+    }
+    
+    private func setUpTaskingStackViewConstraints() {
+        NSLayoutConstraint.activate([
+            taskingStackView.leadingAnchor.constraint(equalTo: taskingContentView.leadingAnchor),
+            taskingStackView.trailingAnchor.constraint(equalTo: taskingContentView.trailingAnchor),
+            taskingStackView.topAnchor.constraint(equalTo: taskingContentView.topAnchor),
+        ])
     }
     
     private func setUpWaitingStackViewConstraints() {
