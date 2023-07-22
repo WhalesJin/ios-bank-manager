@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol MainViewDelegate: AnyObject {
+    func didTappedAddClientButton()
+    func didTappedResetClientButton()
+}
+
 final class MainView: UIView {
+    weak var delegate: MainViewDelegate?
     private let taskStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -75,7 +81,6 @@ final class MainView: UIView {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 20
-//        stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -121,10 +126,10 @@ extension MainView {
 // MARK: - Button Action
 extension MainView {
     @objc func didTappedAddClientButton() {
-        
+        delegate?.didTappedAddClientButton()
     }
     
     @objc func didTappedResetClientButton() {
-        
+        delegate?.didTappedResetClientButton()
     }
 }

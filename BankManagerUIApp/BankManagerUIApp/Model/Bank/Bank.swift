@@ -25,13 +25,10 @@ final class Bank {
     }
     
     func startTask() {
-        let clientCount = Int.random(in: 10...30)
         let startTime = Date()
         var operaion: BlockOperation
         var operationQueue: OperationQueue
-        
-        setUpClientQueue(count: clientCount)
-        
+
         while !clientQueue.isEmpty {
             guard let client = clientQueue.dequeue() else { break }
             
@@ -42,12 +39,23 @@ final class Bank {
         
         depositOperationQueue.waitUntilAllOperationsAreFinished()
         loanOperationQueue.waitUntilAllOperationsAreFinished()
-        printTaskResult(clientCount, startTime)
     }
     
     func resetTask() {
+        clientQueue.clear()
         depositOperationQueue.cancelAllOperations()
         loanOperationQueue.cancelAllOperations()
+    }
+    
+    func addClientQueue() {
+        var client: Client
+        var bankingType: BankingType
+        
+        for turn in 1...10 {
+            bankingType = BankingType.allCases.randomElement() ?? .deposit
+            client = Client(turn, bankingType)
+            clientQueue.enqueue(client)
+        }
     }
 }
 
@@ -58,16 +66,5 @@ extension Bank {
         let formattedWorkTime = String(format: "%.2f", totalWorkTime)
         
         print("업무가 마감되었습니다. 오늘 업무를 처리한 고객은 총 \(clientCount)명이며, 총 업무시간은 \(formattedWorkTime)초입니다.")
-    }
-    
-    private func setUpClientQueue(count: Int) {
-        var client: Client
-        var bankingType: BankingType
-        
-        for turn in 1...count {
-            bankingType = BankingType.allCases.randomElement() ?? .deposit
-            client = Client(turn, bankingType)
-            clientQueue.enqueue(client)
-        }
     }
 }

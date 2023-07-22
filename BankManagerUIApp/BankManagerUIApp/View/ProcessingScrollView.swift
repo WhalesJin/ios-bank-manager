@@ -65,7 +65,7 @@ final class ProcessingScrollView: UIStackView {
         
         configureUI()
         setUpConstraints()
-        setUpLabels()
+//        setUpLabels()
     }
     
     override init(frame: CGRect) {
