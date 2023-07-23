@@ -7,7 +7,16 @@
 
 import Foundation
 
+protocol BankDelegate: AnyObject {
+    func addWatingClient(_ turn: Int, _ bankingType: BankingType)
+    func moveClientToProcessing(_ turn: Int)
+    func finishProcessingClient(_ turn: Int)
+}
+
+
 final class Bank {
+    weak var delegate: BankDelegate?
+    
     private let depositBankManagerCount: Int
     private let loanBankManagerCount: Int
     private var clientQueue = Queue<Client>()
@@ -16,29 +25,14 @@ final class Bank {
     private var depositOperationQueue = OperationQueue()
     private var loanOperationQueue = OperationQueue()
     
+    private var clientCount = 1
+    
     init(depositBankManagerCount: Int, loanBankManagerCount: Int) {
         self.depositBankManagerCount = depositBankManagerCount
         self.loanBankManagerCount = loanBankManagerCount
         
         depositOperationQueue.maxConcurrentOperationCount = depositBankManagerCount
         loanOperationQueue.maxConcurrentOperationCount = loanBankManagerCount
-    }
-    
-    func startTask() {
-        let startTime = Date()
-        var operaion: BlockOperation
-        var operationQueue: OperationQueue
-
-        while !clientQueue.isEmpty {
-            guard let client = clientQueue.dequeue() else { break }
-            
-            operaion = BlockOperation { self.bankManger.work(client: client) }
-            operationQueue = client.banking == .deposit ? depositOperationQueue : loanOperationQueue
-            operationQueue.addOperation(operaion)
-        }
-        
-        depositOperationQueue.waitUntilAllOperationsAreFinished()
-        loanOperationQueue.waitUntilAllOperationsAreFinished()
     }
     
     func resetTask() {
@@ -51,11 +45,33 @@ final class Bank {
         var client: Client
         var bankingType: BankingType
         
-        for turn in 1...10 {
+        for _ in 1...10 {
             bankingType = BankingType.allCases.randomElement() ?? .deposit
-            client = Client(turn, bankingType)
+            client = Client(clientCount, bankingType)
             clientQueue.enqueue(client)
+            clientCount += 1
         }
+    }
+    
+    func startTask() {
+        var operaion: BlockOperation
+        var operationQueue: OperationQueue
+
+        while !clientQueue.isEmpty {
+            guard let client = clientQueue.dequeue() else { break }
+            
+            OperationQueue.main.addOperation { self.delegate?.addWatingClient(client.turn, client.bankingType) }
+            operaion = BlockOperation {
+                OperationQueue.main.addOperation { self.delegate?.moveClientToProcessing(client.turn)}
+                self.bankManger.work(client: client)
+                OperationQueue.main.addOperation { self.delegate?.finishProcessingClient(client.turn)}
+            }
+            operationQueue = client.bankingType == .deposit ? depositOperationQueue : loanOperationQueue
+            operationQueue.addOperation(operaion)
+        }
+        
+        depositOperationQueue.waitUntilAllOperationsAreFinished()
+        loanOperationQueue.waitUntilAllOperationsAreFinished()
     }
 }
 

@@ -7,10 +7,10 @@
 
 struct Client {
     let turn: Int
-    let banking: BankingType
+    let bankingType: BankingType
     
     init(_ turn: Int, _ bankingType: BankingType) {
         self.turn = turn
-        self.banking = bankingType
+        self.bankingType = bankingType
     }
 }

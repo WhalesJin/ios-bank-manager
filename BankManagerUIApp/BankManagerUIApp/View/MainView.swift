@@ -120,18 +120,24 @@ final class MainView: UIView {
             taskTimeLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
-}
-
-// MARK: - setUpConstraints
-extension MainView {
     
+    func addWatingClient(_ turn: Int, _ bankingType: BankingType) {
+        processingView.addWatingClient(turn, bankingType)
+    }
+    
+    func moveClientToProcessing(_ turn: Int) {
+        processingView.moveClientToProcessing(turn)
+    }
+    
+    func finishProcessingClient(_ turn: Int) {
+        processingView.finishProcessingClient(turn)
+    }
 }
 
 // MARK: - Button Action
 extension MainView {
     @objc func didTappedAddClientButton() {
         delegate?.didTappedAddClientButton()
-        processingView.addProcessingStackView()
     }
     
     @objc func didTappedResetClientButton() {

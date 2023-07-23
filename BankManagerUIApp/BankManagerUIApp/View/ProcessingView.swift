@@ -58,7 +58,6 @@ final class ProcessingView: UIStackView {
         
         configureUI()
         setUpConstraints()
-        setUpLabels()
     }
     
     override init(frame: CGRect) {
@@ -82,33 +81,45 @@ final class ProcessingView: UIStackView {
         setUpWaitingStackViewConstraints()
         setUpTaskingStackViewConstraints()
     }
-    
-    private func setUpLabels() {
-        for _ in 0...20 {
-            let label = UILabel()
-            label.text = "TEST"
-            
-            waitingStackView.addArrangedSubview(label)
-        }
-        
-        for _ in 0...7 {
-            let label = UILabel()
-            label.text = "TEST"
-            
-            taskingStackView.addArrangedSubview(label)
-        }
-    }
 }
 
 // MARK: - Client ManageMethod
 extension ProcessingView {
-    func addProcessingStackView() {
-        for _ in 1...10 {
-            let label = UILabel()
-            label.text = "ADD"
-            
-            waitingStackView.addArrangedSubview(label)
+    func addWatingClient(_ turn: Int, _ bankingType: BankingType) {
+        let waitingLabel = UILabel()
+        
+        waitingLabel.tag = turn
+        waitingLabel.text = "\(turn) - \(bankingType.rawValue)"
+        waitingStackView.addArrangedSubview(waitingLabel)
+    }
+    
+    func finishProcessingClient(_ turn: Int) {
+        for subview in taskingStackView.subviews {
+            if subview.tag == turn {
+                guard let label = subview as? UILabel else { break }
+                
+                label.removeFromSuperview()
+            }
         }
+    }
+    
+    func moveClientToProcessing(_ turn: Int) {
+        var clientMessage: String?
+        
+        for subview in waitingStackView.subviews {
+            if subview.tag == turn {
+                guard let label = subview as? UILabel else { break }
+                
+                clientMessage = label.text
+                label.removeFromSuperview()
+            }
+        }
+        
+        let processingLabel = UILabel()
+        
+        processingLabel.text = clientMessage
+        processingLabel.tag = turn
+        taskingStackView.addArrangedSubview(processingLabel)
     }
     
     func resetWaitingStackView() {
