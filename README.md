@@ -23,7 +23,7 @@
 | 🐬Whales🐬 | 🍎Zion🍎 |
 | :--------: | :--------: |
 | <Img src = "https://hackmd.io/_uploads/BJF3FzK53.png" width="190"> | <Img src = "https://hackmd.io/_uploads/ry9ZHwRt2.png" width="200"> |
-|[Github Profile](https://github.com/WhalesJin) |[Github Profile]() |
+|[Github Profile](https://github.com/WhalesJin) |[Github Profile](https://github.com/LeeZion94) |
 
 </br>
 
